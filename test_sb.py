@@ -10,15 +10,16 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.evaluation import evaluate_policy
 
 from rlgym.env.boxy import Boxy
-from rlgym.env.boxy3 import Boxy3
+from rlgym.env.boxy2 import Boxy2
+from rlgym.env.droney import Droney
 from rlgym.utils import *
 
 # Variables
 log_path = os.path.join('Training', 'Logs')
-load_path = os.path.join('Training', 'Saved_Models', 'PPO_Boxy3_2')
+load_path = os.path.join('Training', 'Saved_Models', 'PPO_Droney')
 
 # Initialise environment, memory and agent
-env = DummyVecEnv([lambda: Boxy3()])
+env = DummyVecEnv([lambda: Droney()])
 #noise = NormalActionNoise(mean=np.zeros(env.action_space.shape[0]), sigma=-.1 * np.ones(env.action_space.shape[0]))
 model = PPO.load(load_path, env=env)
 
@@ -75,12 +76,12 @@ plt.xlabel('timesteps')
 plt.ylabel('velocity')
 plt.plot()
 
-plt.figure()
-plt.plot(episode_states[:,4])
-plt.plot(episode_states[:,5])
-plt.xlabel('timesteps')
-plt.ylabel('acceleration')
-plt.plot()
+# plt.figure()
+# plt.plot(episode_states[:,4])
+# plt.plot(episode_states[:,5])
+# plt.xlabel('timesteps')
+# plt.ylabel('acceleration')
+# plt.plot()
 
 plt.show()
 

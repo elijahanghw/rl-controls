@@ -9,19 +9,20 @@ from stable_baselines3.common.noise import NormalActionNoise
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 
-from rlgym.env.boxy3 import Boxy3
+from rlgym.env.boxy2 import Boxy2
+from rlgym.env.droney import Droney
 from rlgym.utils import *
 
 start_time = time.time()
 
 # Path Variables
-log_path = os.path.join('Training', 'Logs', 'PPO_Boxy3_2')
-save_path = os.path.join('Training', 'Saved_Models', 'PPO_Boxy3_2')
-load_path = os.path.join('Training', 'Saved_Models', 'PPO_Boxy3_2')
+log_path = os.path.join('Training', 'Logs', 'PPO_Droney')
+save_path = os.path.join('Training', 'Saved_Models', 'PPO_Droney')
+load_path = os.path.join('Training', 'Saved_Models', 'PPO_Droney')
 
 
 # Initialise environment, memory and agent
-env = make_vec_env(lambda: Boxy3(), n_envs=5)
+env = make_vec_env(lambda: Droney(), n_envs=20)
 policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 128, 128])
 model = PPO("MlpPolicy", env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=log_path)
 

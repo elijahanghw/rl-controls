@@ -5,8 +5,8 @@ import numpy as np
 class Boxy2(gym.Env):
     def __init__(self):
         # Define action and observation space
-        self.action_space = spaces.Box(low=-10, high =10, shape=(2,))
-        self.observation_space = spaces.Box(low =-np.inf, high=np.inf, shape=(4,))
+        self.action_space = spaces.Box(low=-20, high=20, shape=(2,))
+        self.observation_space = spaces.Box(low =-np.inf, high=np.inf, shape=(6,))
 
         # Define environment parameters
         self.max_steps = 1000
@@ -24,26 +24,23 @@ class Boxy2(gym.Env):
         z0 = np.random.uniform(-5,5)
         u0 = np.random.uniform(-1,1)
         w0 = np.random.uniform(-1,1)
-        self.ax0 = 0.0
-        self.az0 = 0.0
+        ax0 = 0.0
+        az0 = 0.0
 
-        self.state = np.array([x0, z0, u0, w0]) # Initial state of boxy
+        self.state = np.array([x0, z0, u0, w0, ax0, az0]) # Initial state of boxy
         self.step_count = 0
         return self.state, {}
     
     def step(self, action):
         # Update the state based on the action
         jx, jz = action
-        x, z, u, w = self.state
+        x, z, u, w, ax, az = self.state
 
-        self.ax0 += jx * self.dt
-        self.az0 += jz * self.dt
+        ax += jx * self.dt
+        az += jz * self.dt
 
-        self.ax0 = np.clip(self.ax0, -1, 1).item()
-        self.az0 = np.clip(self.az0, -1, 1).item()
-
-        ax = self.ax0
-        az = self.az0
+        ax = np.clip(ax, -1, 1).item()
+        az = np.clip(az, -1, 1).item()
 
         x += u * self.dt
         z += w * self.dt
@@ -51,7 +48,7 @@ class Boxy2(gym.Env):
         w += az * self.dt
 
         # Update state and step count
-        self.state = np.array([x, z, u, w])
+        self.state = np.array([x, z, u, w, ax, az])
         self.step_count += 1
 
         # Update action
@@ -60,7 +57,7 @@ class Boxy2(gym.Env):
         ## Calculate the reward for reaching target
         reward = -self.dt * np.sqrt(x**2 + z**2)
 
-        goal_reached = np.linalg.norm(self.state) < self.goal_threshold
+        goal_reached = np.linalg.norm(self.state[:4]) < self.goal_threshold
         if goal_reached:
             reward = 100
             # reward = self.dt
