@@ -12,14 +12,15 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from rlgym.env.boxy import Boxy
 from rlgym.env.boxy2 import Boxy2
 from rlgym.env.droney import Droney
+from rlgym.env.goland_wing.goland import Goland
 from rlgym.utils import *
 
 # Variables
 log_path = os.path.join('Training', 'Logs')
-load_path = os.path.join('Training', 'Saved_Models', 'PPO_Droney')
+load_path = os.path.join('Training', 'Saved_Models', 'PPO_goland')
 
 # Initialise environment, memory and agent
-env = DummyVecEnv([lambda: Droney()])
+env = DummyVecEnv([lambda: Goland()])
 #noise = NormalActionNoise(mean=np.zeros(env.action_space.shape[0]), sigma=-.1 * np.ones(env.action_space.shape[0]))
 model = PPO.load(load_path, env=env)
 
@@ -48,8 +49,8 @@ for episode in range(1, episodes+1):
     episode_states = np.asarray(episode_states)
     #print(episode_states)
 
-    plt.plot(episode_states[:,0], episode_states[:,1])
-    plt.scatter(episode_states[0,0], episode_states[0,1])
+    # plt.plot(episode_states[:,0], episode_states[:,1])
+    # plt.scatter(episode_states[0,0], episode_states[0,1])
 
 plt.scatter(0 ,0, marker='x')
 plt.grid()
@@ -57,24 +58,23 @@ plt.grid()
 action_history = np.asarray(action_history)
 plt.figure()
 plt.plot(action_history[:,0])
-plt.plot(action_history[:,1])
+# plt.plot(action_history[:,1])
 plt.xlabel('timesteps')
 plt.ylabel('action')
 plt.grid()
 
 plt.figure()
 plt.plot(episode_states[:,0])
-plt.plot(episode_states[:,1])
 plt.xlabel('timesteps')
 plt.ylabel('position')
 plt.plot()
 
-plt.figure()
-plt.plot(episode_states[:,2])
-plt.plot(episode_states[:,3])
-plt.xlabel('timesteps')
-plt.ylabel('velocity')
-plt.plot()
+# plt.figure()
+# plt.plot(episode_states[:,2])
+# plt.plot(episode_states[:,3])
+# plt.xlabel('timesteps')
+# plt.ylabel('velocity')
+# plt.plot()
 
 # plt.figure()
 # plt.plot(episode_states[:,4])
